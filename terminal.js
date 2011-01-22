@@ -6,7 +6,7 @@ var terminal = {
     // Terminal escape character
     escape: '\033',
     
-    // Display modifiers reset
+    // Display attributes reset
     reset: '\033[0m',
     
     // Terminal display colors
@@ -32,7 +32,7 @@ var terminal = {
             'cyan':       46,
             'white':      47
         },
-        modifiers: {
+        attribute: {
             'reset':      0,
             'bright':     1,
             'bold':       1,
@@ -46,7 +46,7 @@ var terminal = {
     },
     
     // Get the terminal command for a color. A color command is build up of a 
-    // foreground, a background and a display modifier. These can be defined as 
+    // foreground, a background and a display attribute. These can be defined as 
     // an object resulting in a compound command. When the color is passed as a 
     // string it is assumed this is a foreground color.
     _color: function(color) {
@@ -81,7 +81,7 @@ var terminal = {
     },
     
     // Get a color code for a color type. Color types are `foreground`, 
-    // `background` or `modifier`.
+    // `background` or `attribute`.
     _colorCode: function(name, type) {
         type = type || 'foreground';
         
@@ -128,15 +128,15 @@ var terminal = {
             '%w': {foreground: 'grey'},
             '%k': {foreground: 'black'},
             '%n': 'reset',
-            '%Y': {foreground: 'yellow',  modifier: 'bold'},
-            '%G': {foreground: 'green',   modifier: 'bold'},
-            '%B': {foreground: 'blue',    modifier: 'bold'},
-            '%R': {foreground: 'red',     modifier: 'bold'},
-            '%P': {foreground: 'magenta', modifier: 'bold'},
-            '%M': {foreground: 'magenta', modifier: 'bold'},
-            '%C': {foreground: 'cyan',    modifier: 'bold'},
-            '%W': {foreground: 'grey',    modifier: 'bold'},
-            '%K': {foreground: 'black',   modifier: 'bold'},
+            '%Y': {foreground: 'yellow',  attribute: 'bold'},
+            '%G': {foreground: 'green',   attribute: 'bold'},
+            '%B': {foreground: 'blue',    attribute: 'bold'},
+            '%R': {foreground: 'red',     attribute: 'bold'},
+            '%P': {foreground: 'magenta', attribute: 'bold'},
+            '%M': {foreground: 'magenta', attribute: 'bold'},
+            '%C': {foreground: 'cyan',    attribute: 'bold'},
+            '%W': {foreground: 'grey',    attribute: 'bold'},
+            '%K': {foreground: 'black',   attribute: 'bold'},
             '%N': 'reset',
             '%0': {background: 'black'},
             '%1': {background: 'red'},
@@ -146,11 +146,11 @@ var terminal = {
             '%5': {background: 'magenta'},
             '%6': {background: 'cyan'},
             '%7': {background: 'grey'},
-            '%F': {modifier: 'blink'},
-            '%U': {modifier: 'underline'},
-            '%8': {modifier: 'inverse'},
-            '%9': {modifier: 'bold'},
-            '%_': {modifier: 'bold'},
+            '%F': {attribute: 'blink'},
+            '%U': {attribute: 'underline'},
+            '%8': {attribute: 'inverse'},
+            '%9': {attribute: 'bold'},
+            '%_': {attribute: 'bold'},
         };
         
         // Replace escaped '%' characters
@@ -195,15 +195,15 @@ var terminal = {
     
     // Move the terminal cursor
     move: function(x, y) {
-        x = x || 1;
-        y = y || 1;
+        x = x || 0;
+        y = y || 0;
         
         var command = this.escape + '[';
         if (undefined !== x && 0 < x) {
-            command += x + ';';
+            command += ++x;
         }
         if (undefined !== y && 0 < y) {
-            command += y;
+            command += ';' + ++y ;
         }
         
         sys.print(command + 'H');
