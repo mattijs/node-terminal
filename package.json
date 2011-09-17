@@ -1,7 +1,7 @@
 {
-    'name': 'Terminal',
-    'description': 'Control your terminal',
-    'version': '0.1',
-    'author': 'Mattijs Hoitink <mattijs@monkeyandmachine.com>',
-    'keywords': ['terminal', 'colors', 'text']
+    "name": "Terminal",
+    "description": "Control your terminal",
+    "version": "0.1",
+    "author": "Mattijs Hoitink <mattijs@monkeyandmachine.com>",
+    "keywords": ["terminal", "colors", "text"]
 }
