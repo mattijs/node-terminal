@@ -1,4 +1,4 @@
-var sys = require('sys');
+var sys = require('util');
     
 // Terminal object
 // Allows for controlling the terminal by outputting control characters
