@@ -1,14 +1,14 @@
 var sys = require('util');
-    
+
 // Terminal object
 // Allows for controlling the terminal by outputting control characters
 var terminal = {
     // Terminal escape character
     escape: '\033',
-    
+
     // Display attributes reset
     reset: '\033[0m',
-    
+
     // Terminal display colors
     colors: {
         foreground: {
@@ -41,25 +41,25 @@ var terminal = {
             'underline':  4,
             'blink':      5,
             'inverse':    6,
-            'hidden':     8,
+            'hidden':     8
         }
     },
-    
-    // Get the terminal command for a color. A color command is build up of a 
-    // foreground, a background and a display attribute. These can be defined as 
-    // an object resulting in a compound command. When the color is passed as a 
+
+    // Get the terminal command for a color. A color command is build up of a
+    // foreground, a background and a display attribute. These can be defined as
+    // an object resulting in a compound command. When the color is passed as a
     // string it is assumed this is a foreground color.
     _color: function(color) {
         if (undefined === color) {
             throw 'Color not defined';
         }
-        
+
         // Check if color is only a string
         if (typeof color == 'string') {
             // Assume we want a foreground color
             color = {foreground: color};
         }
-        
+
         // Collect all parts of the color code
         var code = [];
         for (type in color) {
@@ -68,34 +68,34 @@ var terminal = {
                 code.push(colorCode);
             }
         }
-        
+
         // Construct the complete code
         return this.escape + '[' + code.join(';') + 'm';
     },
-    
-    // Print a terminal color command. This uses the `_color` function to 
+
+    // Print a terminal color command. This uses the `_color` function to
     // retreive the color command.
     color: function(color) {
         sys.print(this._color(color));
         return this;
     },
-    
-    // Get a color code for a color type. Color types are `foreground`, 
+
+    // Get a color code for a color type. Color types are `foreground`,
     // `background` or `attribute`.
     _colorCode: function(name, type) {
         type = type || 'foreground';
-        
+
         if (type in this.colors) {
             if (name in this.colors[type]) {
                 return this.colors[type][name];
             }
         }
-        
+
         return null;
     },
-    
-    // Colorize a message and return it. The message can be colorized with 
-    // modifiers that are preceded by a `%` character. The following modifiers 
+
+    // Colorize a message and return it. The message can be colorized with
+    // modifiers that are preceded by a `%` character. The following modifiers
     // are supported:
     //                  text      text            background
     //      ------------------------------------------------
@@ -150,12 +150,12 @@ var terminal = {
             '%U': {attribute: 'underline'},
             '%8': {attribute: 'inverse'},
             '%9': {attribute: 'bold'},
-            '%_': {attribute: 'bold'},
+            '%_': {attribute: 'bold'}
         };
-        
+
         // Replace escaped '%' characters
         message = message.replace('%%', '% ');
-        
+
         // Convert all tokens with color codes
         for (conversion in conversions) {
             // Special case for `reset`
@@ -167,23 +167,23 @@ var terminal = {
         }
         // Reset all escape '%' characters
         message = message.replace('% ', '%');
-        
+
         // Return the message
         return message;
     },
-    
+
     // This uses the `_colorize` function to __print__ a colorized message.
     colorize: function(message) {
         sys.print(this._colorize(message));
         return this;
     },
-    
+
     // Write a message in the terminal
     write: function(message) {
         sys.print(message);
         return this;
     },
-    
+
     // Print one or more new line characters
     nl: function(n) {
         n = n || 1;
@@ -192,12 +192,12 @@ var terminal = {
         }
         return this;
     },
-    
+
     // Move the terminal cursor
     move: function(x, y) {
         x = x || 0;
         y = y || 0;
-        
+
         var command = this.escape + '[';
         if (undefined !== x && 0 < x) {
             command += ++x;
@@ -205,47 +205,47 @@ var terminal = {
         if (undefined !== y && 0 < y) {
             command += ';' + ++y ;
         }
-        
+
         sys.print(command + 'H');
         return this;
     },
-    
+
     // Move the terminal cursor up `x` positions
     up: function(x) {
         sys.print(this.escape + '[' + x + 'A');
         return this;
     },
-    
+
     // Move the terminal cursor down x positions
     down: function(x) {
         sys.print(this.escape + '[' + x + 'B');
         return this;
     },
-    
+
     // Move the terminal cursor `p` positions right
     right: function(p) {
         sys.print(this.escape + '[' + p + 'C');
         return this;
     },
-    
+
     // Move the terminal cursor `p` positions left
     left: function(p) {
         sys.print(this.escape + '[' + p + 'D');
         return this;
     },
-    
+
     // Clear all characters from the terminal screen
     clear: function() {
         sys.print(this.escape + '[2J');
         return this;
     },
-    
+
     // Clear the line the cursor is at
     clearLine: function() {
         sys.print(this.escape + '[2K');
         return this;
     },
-    
+
     // Clear the next `n` characters from the current cursor position.
     clearCharacters: function(n) {
         this.write(new Array(n + 2).join(' ')).left(n + 2);
