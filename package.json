@@ -3,7 +3,7 @@
     "description":  "control your terminal from node",
     "version":      "0.1.0",
     "author":       "Mattijs Hoitink <mattijs@monkeyandmachine.com>",
-    "keywords":     ["terminal", "colors", "text"]
+    "keywords":     ["terminal", "colors", "text"],
     "homepage":     "https://github.com/mattijs/node-terminal",
     "repository":   {
         "type": "git",
