@@ -4,13 +4,13 @@ var sys = require('util');
 // Allows for controlling the terminal by outputting control characters
 var terminal = {
     // Terminal escape character
-    escape: '\033',
+    escape_code: '\033',
 
     // Display attributes reset
-    reset: '\033[0m',
+    reset_code: '\033[0m',
 
     // Terminal display colors
-    colors: {
+    color_codes: {
         foreground: {
             'black':      30,
             'red':        31,
@@ -70,7 +70,7 @@ var terminal = {
         }
 
         // Construct the complete code
-        return this.escape + '[' + code.join(';') + 'm';
+        return this.escape_code + '[' + code.join(';') + 'm';
     },
 
     // Print a terminal color command. This uses the `_color` function to
@@ -80,14 +80,20 @@ var terminal = {
         return this;
     },
 
+    // Print the color reset code.
+    reset: function() {
+        sys.print(this.reset_code);
+        return this;
+    },
+
     // Get a color code for a color type. Color types are `foreground`,
     // `background` or `attribute`.
     _colorCode: function(name, type) {
         type = type || 'foreground';
 
-        if (type in this.colors) {
-            if (name in this.colors[type]) {
-                return this.colors[type][name];
+        if (type in this.color_codes) {
+            if (name in this.color_codes[type]) {
+                return this.color_codes[type][name];
             }
         }
 
@@ -160,7 +166,7 @@ var terminal = {
         for (conversion in conversions) {
             // Special case for `reset`
             if ('reset' === conversions[conversion]) {
-                message = message.replace(conversion, this.reset);
+                message = message.replace(conversion, this.reset_code);
             } else {
                 message = message.replace(new RegExp(conversion, ['g']), this._color(conversions[conversion]));
             }
@@ -198,7 +204,7 @@ var terminal = {
         x = x || 0;
         y = y || 0;
 
-        var command = this.escape + '[';
+        var command = this.escape_code + '[';
         if (undefined !== x && 0 < x) {
             command += ++x;
         }
@@ -212,37 +218,37 @@ var terminal = {
 
     // Move the terminal cursor up `x` positions
     up: function(x) {
-        sys.print(this.escape + '[' + x + 'A');
+        sys.print(this.escape_code + '[' + x + 'A');
         return this;
     },
 
     // Move the terminal cursor down x positions
     down: function(x) {
-        sys.print(this.escape + '[' + x + 'B');
+        sys.print(this.escape_code + '[' + x + 'B');
         return this;
     },
 
     // Move the terminal cursor `p` positions right
     right: function(p) {
-        sys.print(this.escape + '[' + p + 'C');
+        sys.print(this.escape_code + '[' + p + 'C');
         return this;
     },
 
     // Move the terminal cursor `p` positions left
     left: function(p) {
-        sys.print(this.escape + '[' + p + 'D');
+        sys.print(this.escape_code + '[' + p + 'D');
         return this;
     },
 
     // Clear all characters from the terminal screen
     clear: function() {
-        sys.print(this.escape + '[2J');
+        sys.print(this.escape_code + '[2J');
         return this;
     },
 
     // Clear the line the cursor is at
     clearLine: function() {
-        sys.print(this.escape + '[2K');
+        sys.print(this.escape_code + '[2K');
         return this;
     },
 
