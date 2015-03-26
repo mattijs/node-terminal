@@ -76,13 +76,13 @@ var terminal = {
     // Print a terminal color command. This uses the `_color` function to
     // retreive the color command.
     color: function(color) {
-        sys.print(this._color(color));
+        process.stdout.write(this._color(color));
         return this;
     },
 
     // Print the color reset code.
     reset: function() {
-        sys.print(this.reset_code);
+        process.stdout.write(this.reset_code);
         return this;
     },
 
@@ -180,13 +180,13 @@ var terminal = {
 
     // This uses the `_colorize` function to __print__ a colorized message.
     colorize: function(message) {
-        sys.print(this._colorize(message));
+        process.stdout.write(this._colorize(message));
         return this;
     },
 
     // Write a message in the terminal
     write: function(message) {
-        sys.print(message);
+        process.stdout.write(message);
         return this;
     },
 
@@ -194,7 +194,7 @@ var terminal = {
     nl: function(n) {
         n = n || 1;
         for (var i = 0; i < n; i++) {
-            sys.print('\n');
+            process.stdout.write('\n');
         }
         return this;
     },
@@ -212,43 +212,43 @@ var terminal = {
             command += ';' + ++y ;
         }
 
-        sys.print(command + 'H');
+        process.stdout.write(command + 'H');
         return this;
     },
 
     // Move the terminal cursor up `x` positions
     up: function(x) {
-        sys.print(this.escape_code + '[' + x + 'A');
+        process.stdout.write(this.escape_code + '[' + x + 'A');
         return this;
     },
 
     // Move the terminal cursor down x positions
     down: function(x) {
-        sys.print(this.escape_code + '[' + x + 'B');
+        process.stdout.write(this.escape_code + '[' + x + 'B');
         return this;
     },
 
     // Move the terminal cursor `p` positions right
     right: function(p) {
-        sys.print(this.escape_code + '[' + p + 'C');
+        process.stdout.write(this.escape_code + '[' + p + 'C');
         return this;
     },
 
     // Move the terminal cursor `p` positions left
     left: function(p) {
-        sys.print(this.escape_code + '[' + p + 'D');
+        process.stdout.write(this.escape_code + '[' + p + 'D');
         return this;
     },
 
     // Clear all characters from the terminal screen
     clear: function() {
-        sys.print(this.escape_code + '[2J');
+        process.stdout.write(this.escape_code + '[2J');
         return this;
     },
 
     // Clear the line the cursor is at
     clearLine: function() {
-        sys.print(this.escape_code + '[2K');
+        process.stdout.write(this.escape_code + '[2K');
         return this;
     },
 
